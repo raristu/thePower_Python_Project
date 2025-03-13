@@ -29,7 +29,7 @@ Los requisitos son los siguientes:
 
 ## Resultados y conclusiones:
 
-
+Este proyecto ha servido para afianzar mis conocimientos en el uso de funciones y creación y uso de clases en Python.
 
 ## Contribuciones: 🤝 ¡Las contribuciones son bienvenidas!
 
