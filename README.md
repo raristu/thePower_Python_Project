@@ -27,7 +27,7 @@ Los requisitos son los siguientes:
     ● Uso de módulos
     ● Buenas prácticas
 
-## Resultados y conclusiones:
+## Resultados y conclusiones: 
 
 Este proyecto ha servido para afianzar mis conocimientos en el uso de funciones y creación y uso de clases en Python.
 
