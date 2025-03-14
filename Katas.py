@@ -120,9 +120,11 @@ lista_vacia = []
 
 def promedio(lista):
     try:    # Intenta calcular el promedio
+        if len(lista) == 0:
+            raise ZeroDivisionError    # Lanza una excepción si la lista está vacía
         return sum(lista)/len(lista) # Suma los números y divide por la cantidad de números
     except ZeroDivisionError:  # Si la lista está vacía
-        raise Exception("La lista está vacía")
+        print("La lista está vacía")
 
 print(promedio(lista_numeros1))
 print(promedio(lista_vacia))  
@@ -197,7 +199,7 @@ from functools import reduce    # Importa la función reduce de la librería fun
 lista_digitos = [5, 7, 2]
 
 def numero_correspondiente(lista):
-    return reduce(lambda x, y: x * 10 + y, lista)   # Devuelve el número correspondiente
+    return int(''.join(map(str, lista)))   # Devuelve el número correspondiente
 
 print(numero_correspondiente(lista_digitos))
 
@@ -260,10 +262,21 @@ print(concatenar(lista_palabras))
 
 # 24. Calcula la diferencia total en los valores de una lista. Usa la función reduce() .
 
+from functools import reduce    # Importa la función reduce de la librería functools
+
 lista_valores = [1, 2, 3, 4, 5]
 
 def diferencia_total(lista):
     return reduce(lambda x, y: x - y, lista)    # Calcula la diferencia total
+
+print(diferencia_total(lista_valores))
+
+# Alternativa sin el uso de reduce()
+
+lista_valores = [1, 2, 3, 4, 5]
+
+def diferencia_total_absoluta(lista):
+    return sum(lista) - 2 * min(lista)    # Calcula la diferencia total en términos absolutos
 
 print(diferencia_total(lista_valores))
 
@@ -300,7 +313,12 @@ print(promedio(lista_numeros2))
 lista_dada = [5, 2, 3, 4, 5, 6, 2, 8, 9, 1]
 
 def duplicado(lista):
-    return next((x for x in lista if lista.count(x) > 1), None)     # Devuelve el primer elemento duplicado
+    elementos_vistos = set()    # Crea un conjunto vacío
+    for elemento in lista: # Recorre la lista
+        if elemento in elementos_vistos:    
+            return elemento     # Devuelve el primer elemento duplicado
+        elementos_vistos.add(elemento)  # Añade el elemento al conjunto
+    return None     # Si no hay elementos duplicados, devuelve None
 
 print(duplicado(lista_dada))
 
@@ -308,11 +326,11 @@ print(duplicado(lista_dada))
 # carácter '#', excepto los últimos cuatro.
 
 def enmascarar(variable):
-    cadena = str(variable)
-    if len(cadena) <= 4:    
-        return cadena       # Si la cadena tiene 4 caracteres o menos, no se enmascara
-    else:
+    cadena = str(variable) # Convierte la variable a cadena
+    if len(cadena) > 4: # Si la cadena tiene más de 4 caracteres
         return "#" * (len(cadena) - 4) + cadena[-4:]    # Enmascara todos los caracteres excepto los últimos cuatro
+    else:
+        return cadena    # Si la cadena tiene 4 caracteres o menos, no se enmascara
 
 print(enmascarar(1234567890123456))
 print(enmascarar("Hola me llamo Raul"))
@@ -333,17 +351,17 @@ print(anagramas(palabra1, palabra2))
 # esa lista. Si el nombre está en la lista, se imprime un mensaje indicando que fue encontrado, de lo contrario, se
 # lanza una excepción.
 
-def buscar_nombre():
-    try:    # Intenta buscar el nombre
-        lista_nombres = input("Introduce una lista de nombres separados por comas: ").split(",")    # Introduce los nombres separados por comas
-        nombre = input("Introduce un nombre a buscar: ")    # Introduce el nombre a buscar
-        if nombre in lista_nombres:     
-            print("El nombre fue encontrado")   # Si el nombre está en la lista, se imprime un mensaje
-        else:
-            raise Exception("El nombre no fue encontrado")  # Si el nombre no está en la lista, se lanza una excepción
-    except Exception as e:  
-        print(e)    # Muestra el mensaje de la excepción
-    
+def buscar_nombre():    
+    try: # Intenta buscar el nombre  
+        lista_nombres = input("Introduce una lista de nombres separados por comas: ").split(",")        
+        nombre = input("Introduce un nombre a buscar: ")        
+        if nombre.strip().lower() in [nombre.strip().lower() for nombre in lista_nombres]: # Convierte cada nombre a minúsculas, elimina los espacios y compara los nombres en minúsculas y sin espacios      
+            print("El nombre fue encontrado")        
+        else:            
+            raise Exception("El nombre no fue encontrado")    
+    except Exception as e:        
+        print(e)
+
 buscar_nombre()
 
 # 32. Crea una función que tome un nombre completo y una lista de empleados, busque el nombre completo en la lista y
@@ -407,7 +425,10 @@ class Arbol:    # Define la clase Arbol
         self.ramas = [x + 1 for x in self.ramas]
 
     def quitar_rama(self, posicion):    # Elimina una rama en una posición específica
-        self.ramas.pop(posicion)
+        try:
+            self.ramas.pop(posicion)
+        except IndexError: 
+            print("La rama en la posición especificada no existe") # Lanza un error si la rama no existe
 
     def info_arbol(self):   # Devuelve información sobre el árbol
         return f"Tronco: {self.tronco}, Ramas: {len(self.ramas)}, Longitudes de las ramas: {self.ramas}"
@@ -492,7 +513,9 @@ def reemplazar_palabras(texto, palabra_original, palabra_nueva):    # Reemplaza 
     return texto.replace(palabra_original, palabra_nueva)   
 
 def eliminar_palabra(texto, palabra):   # Elimina una palabra de un texto
-    return texto.replace(palabra, "")
+    palabras = texto.split()   # Divide el texto en palabras
+    palabras = [p for p in palabras if p != palabra]   # Filtra las palabras para excluir la palabra a eliminar
+    return " ".join(palabras)   # Une las palabras restantes con espacios
 
 def procesar_texto(texto, opcion, *args):   # Procesa un texto según la opción especificada
     if opcion == "contar":
